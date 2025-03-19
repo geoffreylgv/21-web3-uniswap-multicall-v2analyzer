@@ -1,17 +1,17 @@
 // const provider = new ethers.providers.JsonRpcProvider(import.meta.env.ALCHEMY_SEPOLIA_API_KEY_URL);
 
-
-import { useState } from 'react';
+import "./index.css";
+import { useEffect, useState } from 'react';
 import { ethers } from 'ethers';
 import multicallAbi from "./ABI/multicallabi.json";
 import pairAbi from "./ABI/pairabi.json";
 import erc20Abi from "./ABI/erc20.json";
-import { getReadOnlyProvider } from 'utils';
-import { EXAMPLE_PAIRS } from 'utils/sample';
+import { getReadOnlyProvider } from './utils';
+import { EXAMPLE_PAIRS } from './utils/sample';
 
 function App() {
 
-  const multicallAddress = import.meta.env.MULTICAL_ADDRESS;
+  const multicallAddress = '0xeefba1e63905ef1d7acba5a8513c70307c1ce441';
   // const provider = new ethers.JsonRpcProvider(import.meta.env.ALCHEMY_SEPOLIA_API_KEY_URL);
   const provider = getReadOnlyProvider();
 
@@ -19,6 +19,16 @@ function App() {
   const [pairData, setPairData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+
+  const handleSampleClick = (address) => {
+    setPairAddress(address);
+  };
+
+  useEffect(() => {
+    if (pairAddress) {
+      handleSubmit({ preventDefault: () => {} });
+    }
+  }, [pairAddress]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -127,43 +137,39 @@ function App() {
     }
   };
 
-
-  const handleSampleClick = (address) => {
-    setPairAddress(address);
-    handleSubmit({ preventDefault: () => { } });
-  };
-
   return (
-    <div className="min-h-screen bg-gray p-8">
+    <div className="min-h-screen bg-gray-50 p-8">
       <div className="max-w-4xl mx-auto space-y-8">
-        {/* Header Section */}
+        {/* Header */}
         <div className="text-center space-y-4">
-          <h1 className="text-4xl text-black font-bold">
+          <h1 className="text-4xl font-bold text-primary">
             Uniswap V2 Pair Analyzer
           </h1>
-          <p className="text-gray-400">Explore liquidity pool details in real-time</p>
+          <p className="text-gray-600">Explore liquidity pool details in real-time</p>
         </div>
 
         {/* Input Section */}
-        <div className="bg-gray-800 rounded-xl p-6 shadow-xl">
+        <div className="bg-white rounded-xl shadow-md p-6 transition-material">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="flex gap-4">
               <input
                 type="text"
                 value={pairAddress}
                 onChange={(e) => setPairAddress(e.target.value.trim())}
-                placeholder="Enter Pair Address (0x...)"
-                className="flex-1 p-4 bg-gray-700 rounded-lg text-gray-100 placeholder-gray-400 
-                         focus:outline-none focus:ring-2 focus:ring-cyan-400"
+                placeholder="Your pair address goes here ..."
+                className="flex-1 p-4 bg-gray-100 rounded-lg placeholder-gray-400 
+                         focus:outline-none focus:ring-2 focus:ring-primary"
               />
               <button
                 type="submit"
                 disabled={isLoading}
-                className="px-8 py-4 px-3 py-1.5 text-sm bg-blue-100 hover:bg-blue-600 text-gray-700 rounded-lg hover:opacity-90 disabled:opacity-50 transition-all"
+                className="px-8 py-4 bg-primary text-white font-medium 
+                         rounded-lg hover:bg-primary-dark disabled:opacity-50 
+                         transition-material"
               >
                 {isLoading ? (
                   <div className="flex items-center gap-2">
-                    <div className="w-4 h-4 border-2 border-white bg-blue animate-spin" />
+                    <div className="w-4 h-4 border-2 border-white rounded-full animate-spin" />
                     Analyzing...
                   </div>
                 ) : (
@@ -173,7 +179,6 @@ function App() {
             </div>
 
             {/* Example Pairs */}
-            {/* on try */}
             <div className="mb-6 max-w-4xl mx-auto">
               <h3 className="text-xl font-medium text-gray-500 mb-2">Try these examples:</h3>
               <div className="flex gap-2">
@@ -203,7 +208,7 @@ function App() {
         {pairData && (
           <div className="space-y-6">
             {/* Token Pair Overview */}
-            <div className="bg-gray-800 rounded-xl p-6 shadow-xl">
+            <div className="bg-gray-900/100 rounded-xl p-6 shadow-xl">
               <h2 className="text-xl font-semibold text-cyan-400 mb-6">Token Pair</h2>
               <div className="grid md:grid-cols-2 gap-6">
                 <TokenCard token={pairData.token0} />
@@ -257,7 +262,7 @@ const TokenCard = ({ token }) => (
     </div>
     <div className="mt-4 space-y-2">
       <DetailItem label="Address" value={trancateAddress(token.address)} />
-      <DetailItem label="Decimals" value={token.decimal} />
+      <DetailItem label="Decimals" value={token.decimals} />
     </div>
   </div>
 );

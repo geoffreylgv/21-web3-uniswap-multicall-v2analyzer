@@ -1,5 +1,3 @@
-// const provider = new ethers.providers.JsonRpcProvider(import.meta.env.ALCHEMY_SEPOLIA_API_KEY_URL);
-
 import "./index.css";
 import { useEffect, useState } from 'react';
 import { ethers } from 'ethers';

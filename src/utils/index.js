@@ -17,7 +17,7 @@ export const config = createConfig({
 
 export const getReadOnlyProvider = () => {
     if (readonlyProvider) return readonlyProvider;
-    readonlyProvider = new JsonRpcProvider(import.meta.env.ALCHEMY_SEPOLIA_API_KEY_URL);
+    readonlyProvider = new JsonRpcProvider('https://eth-mainnet.g.alchemy.com/v2/H52v4zgu-ah7796G2rMlUoIvb9NPFULH');
 
     return readonlyProvider;
 };
